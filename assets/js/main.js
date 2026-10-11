@@ -301,6 +301,10 @@
     var stage, thumbs, curEl, totEl, statusEl;
     var items = [], thumbEls = [], idx = 0, timer = null;
     var onScreen = false, paused = false;   // autoplay gating state
+    // On phones we never keep 16 full-size images decoded at once — only the
+    // slides near the center hold a real src; the rest hold a 1-byte blank.
+    var isMobile = !!(window.matchMedia && window.matchMedia('(max-width: 767px)').matches);
+    var BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
     function build() {
       stage    = $('#carousel-stage');
@@ -314,14 +318,21 @@
         var src = MEMORY_DIR + 'memory-' + i + '.jpg';
 
         var img = document.createElement('img');
-        img.src = src;
         img.alt = 'Memory ' + i;
         img.loading = i < 4 ? 'eager' : 'lazy';
         img.decoding = 'async';
         img.className = 'carousel-item';
         img.draggable = false;
+        img.setAttribute('data-src', src);
+        if (isMobile && i > 4) {           // far slides start blank on phones
+          img.src = BLANK;
+          img.setAttribute('data-state', 'blank');
+        } else {
+          img.src = src;
+          img.setAttribute('data-state', 'real');
+        }
         img.onerror = function (n) {
-          return function () { this.onerror = null; this.src = placeholder('Memory ' + n, 800, 500); };
+          return function () { this.onerror = null; this.setAttribute('data-state', 'ph'); this.src = placeholder('Memory ' + n, 800, 500); };
         }(i);
         (function (n) {
           img.addEventListener('click', function () { if (n - 1 !== idx) { idx = n - 1; render(); restart(); } });
@@ -356,6 +367,19 @@
         if (off >  total / 2) off -= total;
         if (off < -total / 2) off += total;
         var abs = Math.abs(off);
+
+        // mobile memory windowing: only slides near the center keep a
+        // decoded full-size image; the rest release it back to a blank
+        if (isMobile) {
+          var st = item.getAttribute('data-state');
+          if (abs <= 2 && st === 'blank') {
+            item.setAttribute('data-state', 'real');
+            item.src = item.getAttribute('data-src');
+          } else if (abs > 2 && st === 'real') {
+            item.setAttribute('data-state', 'blank');
+            item.src = BLANK;
+          }
+        }
 
         item.classList.toggle('is-center', abs === 0);
         if (abs === 0) {

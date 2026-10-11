@@ -1,0 +1,5 @@
+# ✏️ EDIT: replace with your real GitHub Pages URL
+User-agent: *
+Allow: /
+
+Sitemap: https://engr-imranhasan.github.io/portfolio/sitemap.xml

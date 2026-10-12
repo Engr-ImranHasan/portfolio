@@ -292,8 +292,8 @@
 </section>
 
 <!-- ══════════════════════════════════════════════════════════
-     SELECTED PROJECTS   (NEW)
-     PDFs live in assets/img/projects/p1.pdf … p7.pdf
+     SELECTED PROJECTS — horizontal auto carousel + detail modal
+     Cover images live in assets/img/projects/proj-*.jpg
      ══════════════════════════════════════════════════════════ -->
 <section id="projects" class="relative z-10 py-16 sm:py-20">
   <div class="max-w-7xl mx-auto px-5 sm:px-6">
@@ -304,11 +304,29 @@
       </div>
       <h2 class="section-title">Selected Projects</h2>
       <div class="section-rule mx-auto mt-5"></div>
-      <p class="text-slate-400 mt-4 text-sm sm:text-base">Structural design dossiers, geospatial analyses and computational studies — each opens as a full PDF case document.</p>
+      <p class="text-slate-400 mt-4 text-sm sm:text-base">Real buildings I designed under EPCT — from G+3 residences to a B+G+13 tower. Click any project for role, scope, challenge → solution → result and software used.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="project-grid">
-      <!-- cards are rendered by main.js from the PROJECTS array (easy to edit) -->
+    <div class="relative w-full max-w-6xl mx-auto px-4 select-none" data-reveal>
+      <div id="project-stage" class="relative h-[470px] sm:h-[500px] w-full overflow-visible"
+           tabindex="0" role="group" aria-roledescription="carousel" aria-label="Selected projects">
+        <p id="project-status" class="sr-only" aria-live="polite"></p>
+        <!-- slides injected by main.js (ProjCarousel) -->
+      </div>
+
+      <div class="flex items-center justify-center gap-5 mt-6">
+        <button id="project-prev" type="button" aria-label="Previous project"
+                class="w-11 h-11 rounded-full glass-panel border border-slate-700 text-white hover:bg-blue-600 hover:border-blue-500 transition-all grid place-items-center text-lg shadow-xl">
+          <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-chevron-left"></use></svg>
+        </button>
+        <span class="font-mono text-sm text-slate-400 tabular-nums">
+          <span id="project-current" class="text-white font-bold">01</span> / <span id="project-total">06</span>
+        </span>
+        <button id="project-next" type="button" aria-label="Next project"
+                class="w-11 h-11 rounded-full glass-panel border border-slate-700 text-white hover:bg-blue-600 hover:border-blue-500 transition-all grid place-items-center text-lg shadow-xl">
+          <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-chevron-right"></use></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -945,6 +963,32 @@
   <!-- chevron-left + rotate(90deg) clockwise => points UP -->
   <svg class="icon" style="transform:rotate(90deg)" aria-hidden="true"><use href="assets/img/icons.svg#i-chevron-left"></use></svg>
 </button>
+
+<!-- ══════════════ PROJECT DETAIL MODAL ══════════════ -->
+<div id="proj-modal" class="proj-modal hidden" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div class="proj-modal__backdrop" data-pm-close></div>
+  <div class="proj-modal__dialog glass-panel">
+    <button type="button" class="proj-modal__close" data-pm-close aria-label="Close project details">
+      <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-xmark"></use></svg>
+    </button>
+    <div class="proj-modal__body">
+      <div class="proj-modal__media"><img id="pm-img" src="" alt=""></div>
+      <div class="proj-modal__info">
+        <span id="pm-cat" class="pm-cat"></span>
+        <h3 id="pm-title" class="font-heading text-xl sm:text-2xl font-bold text-white leading-snug"></h3>
+        <div id="pm-meta" class="flex flex-wrap gap-2 mt-4"></div>
+
+        <div class="pm-block"><h4>My Role</h4><p id="pm-role"></p></div>
+        <div class="pm-block"><h4>Scope of Work</h4><p id="pm-scope"></p></div>
+        <div class="pm-block pm-block--challenge"><h4>Challenge</h4><p id="pm-challenge"></p></div>
+        <div class="pm-block pm-block--solution"><h4>Solution</h4><p id="pm-solution"></p></div>
+        <div class="pm-block pm-block--result"><h4>Result</h4><p id="pm-result"></p></div>
+
+        <div class="pm-block"><h4>Software &amp; Codes</h4><div id="pm-tags" class="flex flex-wrap gap-1.5 mt-2"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- VISITOR COUNTER (GoatCounter — free, privacy-safe). Visit stats: https://imran2050.goatcounter.com -->
 <script data-goatcounter="https://imran2050.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>

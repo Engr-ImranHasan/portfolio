@@ -33,42 +33,68 @@
      ✏️✏️✏️  EDIT YOUR CONTENT HERE  ✏️✏️✏️
      ==================================================================== */
 
-  /* ---- Projects: one entry per PDF in assets/img/projects/ ---- */
+  /* ---- Projects: cover images in assets/img/projects/proj-*.jpg ----
+     ✏️ EDIT: role / scope / challenge / solution / result text নিজের মতো বদলে নিও */
   var PROJECTS = [
-    { file: 'p1.pdf', cat: 'Structural Design', accent: 'blue',
-      title: 'G+15 Residential Tower — Full Structural Design',
-      desc: 'Complete ETABS modelling, lateral load-path design and reinforcement detailing for a fifteen-storey residential tower, checked against BNBC 2020 seismic provisions and ACI 318.',
-      tags: ['ETABS', 'CSI SAFE', 'BNBC 2020', 'ACI 318'] },
+    { img: 'assets/img/projects/proj-15.jpg', cat: 'Residential Tower', accent: 'blue',
+      title: 'B+G+13 Storied Tower — Lovely Road, Subid Bazar, Sylhet',
+      storey: 'B+G+13', location: 'Subid Bazar, Sylhet', client: 'Apon Associates',
+      role: 'Structural design engineer (EPCT team) — full ETABS modelling, analysis, member design and reinforcement detailing; joined site visits for mat-concreting and column verticality checks.',
+      scope: 'Complete structural package for a 14-level tower: gravity, wind and BNBC 2020 seismic analysis, mat–pile foundation design, slab–beam–column detailing and bar bending schedules.',
+      challenge: 'High-seismic Sylhet zone on soft alluvial soil, with irregular balcony setbacks producing torsion under lateral load.',
+      solution: 'Stiffness-regularised frame with capacity-designed joints and a pile–mat composite foundation, checked against BNBC 2020 and ACI 318.',
+      result: 'Drawing package approved with minimal correction — 126 coordinated sheets delivered across architectural, structural, electrical and sanitary trades.',
+      tags: ['ETABS', 'CSI SAFE', 'BNBC 2020', 'ACI 318', 'AutoCAD'] },
 
-    { file: 'p2.pdf', cat: 'Foundation Engineering', accent: 'amber',
-      title: 'Mat & Isolated Foundation Design Package',
-      desc: 'Substructure and reinforcement detailing across multiple high-rise projects — mat thickness optimisation, punching-shear checks and bar bending schedules generated from CSI SAFE output.',
-      tags: ['CSI SAFE', 'AutoCAD', 'BBS'] },
+    { img: 'assets/img/projects/proj-09.jpg', cat: 'Residential · G+8', accent: 'emerald',
+      title: '(G+8) 9 Storied Residence — Lechubagan, Sylhet',
+      storey: 'G+8', location: 'Lechubagan, Sylhet', client: 'Mr. Nurul Islam Khan',
+      role: 'Structural engineer under EPCT — modelling, design and detailing; site inspection during foundation and upper-floor slab casting.',
+      scope: 'Nine-level RC frame: seismic analysis, foundation design, full reinforcement detailing and quantity estimation.',
+      challenge: 'Narrow urban plot with adjacent structures — limited workspace for excavation and strict drift control.',
+      solution: 'Compact lateral system with regularised stiffness, plus staged construction checks coordinated with the contractor.',
+      result: '51-sheet structural package delivered; construction progressed with zero design revisions after issue.',
+      tags: ['ETABS', 'CSI SAFE', 'AutoCAD', 'BNBC 2020'] },
 
-    { file: 'p3.pdf', cat: 'GIS & Seismic Risk', accent: 'emerald',
-      title: 'Seismic Vulnerability Mapping — Dhaka Informal Settlements',
-      desc: 'ArcGIS Pro multi-criteria analysis combining building stock, soil class, fault proximity and road access to produce a post-event vulnerability surface for informal settlements.',
-      tags: ['ArcGIS Pro', 'MCDM', 'Python'] },
+    { img: 'assets/img/projects/proj-07.jpg', cat: 'Apartment · G+6', accent: 'amber',
+      title: 'G+6 Apartment Blocks A–E — Suvechcha, Miafazilchist, Sylhet',
+      storey: 'G+6', location: 'Miafazilchist, Sylhet', client: 'Dreamland Property Developer',
+      role: 'Structural designer (EPCT) — five apartment blocks modelled and detailed; periodic site supervision visits.',
+      scope: 'Repeatable multi-block structural system: typical-floor plate optimisation, foundation design and BBS for all five blocks.',
+      challenge: 'Five blocks with mirrored unit plans — keeping one consistent, error-free detailing standard across blocks.',
+      solution: 'Parameterised typical-plate design with a shared detailing template and Excel-driven bar bending schedules.',
+      result: '71-sheet package covering all blocks; repetitive floors cut detailing time significantly.',
+      tags: ['ETABS', 'AutoCAD', 'MS Excel', 'BBS'] },
 
-    { file: 'p4.pdf', cat: 'GIS & Hydrology', accent: 'blue',
-      title: 'National Bridge Scour Susceptibility Model',
-      desc: 'A data-driven, GIS-based national assessment of bridge scour susceptibility under flood hazard, built from catchment, slope, discharge and pier-type predictors.',
-      tags: ['ArcGIS Pro', 'Machine Learning'] },
+    { img: 'assets/img/projects/proj-05.jpg', cat: 'Residential · 5-Storied', accent: 'blue',
+      title: 'Five Storied Residence — North Bagbari, Sylhet',
+      storey: 'G+4', location: 'North Bagbari, Sylhet', client: 'Mrs. Jhuma Rani Talukder',
+      role: 'Structural engineer (EPCT) — design, detailing and soil-investigation coordination; borehole testing supervised on site.',
+      scope: 'Five-level residence on borehole-informed foundation: site plan, substructure design and full superstructure detailing.',
+      challenge: 'Weak near-surface soil next to a canal — settlement and bearing-capacity risk for a shallow foundation.',
+      solution: 'Foundation selected from borehole data (BH-1/BH-2) with settlement checks and conservative bearing design.',
+      result: '45-sheet package with site & borehole-integrated foundation design, approved for construction.',
+      tags: ['ETABS', 'CSI SAFE', 'Borehole Data', 'AutoCAD'] },
 
-    { file: 'p5.pdf', cat: 'Hydraulic Modelling', accent: 'emerald',
-      title: 'EPANET Water Distribution Network Simulation',
-      desc: 'Calibrated hydraulic model of an urban supply network — nodal demand allocation, pressure-zone balancing and residual-chlorine travel-time verification.',
-      tags: ['EPANET', 'MS Excel'] },
+    { img: 'assets/img/projects/proj-04.jpg', cat: 'Residential · G+3', accent: 'emerald',
+      title: 'G+3 Residence — Lake City, Akhalia, Sylhet',
+      storey: 'G+3', location: 'Lake City, Akhalia, Sylhet', client: 'Dr. Nadira Begum',
+      role: 'Structural designer (EPCT) — analysis, detailing and quantity take-off; site checks at key casting stages.',
+      scope: 'Four-level residence: gravity and seismic design, foundation and full reinforcement drawings.',
+      challenge: 'Multi-unit typical floor (two mirrored units per plate) requiring clean, clash-free detailing.',
+      solution: 'Symmetric layout exploited for modelling efficiency; standardised beam–slab detailing across floors.',
+      result: '39-sheet structural set issued for construction with consistent unit-wise quantity estimates.',
+      tags: ['ETABS', 'AutoCAD', 'BNBC 2020'] },
 
-    { file: 'p6.pdf', cat: 'Workflow Automation', accent: 'amber',
-      title: 'Bar Bending Schedule & Quantity Automation',
-      desc: 'An Excel + Python workflow that converts reinforcement drawings into bar bending schedules and quantity take-offs, cutting manual estimation time on repetitive floor plates.',
-      tags: ['Python', 'MS Excel', 'BBS'] },
-
-    { file: 'p7.pdf', cat: 'Computational Design', accent: 'blue',
-      title: 'Seismic Optimisation of RC Moment Frames',
-      desc: 'Performance-based design study optimising RC special moment resisting frames with a genetic algorithm under BNBC 2020 response-spectrum demand.',
-      tags: ['Python', 'Genetic Algorithm', 'ETABS'] }
+    { img: 'assets/img/projects/proj-03.jpg', cat: 'Residential · G+3', accent: 'amber',
+      title: 'G+3 Residence — Shilam, Sylhet',
+      storey: 'G+3', location: 'Shilam, Sylhet', client: 'Private Client',
+      role: 'Structural engineer (EPCT) — compact 2,600 sft residence designed and detailed end-to-end.',
+      scope: 'Four-level, 2,600 sft residence: frame analysis, foundation design, GF/typical floor detailing.',
+      challenge: 'Small footprint with a 5′-7″ corridor core — fitting an efficient stair and frame into a tight plan.',
+      solution: 'Optimised column grid aligned to partition walls; economical member sizes within BNBC 2020 limits.',
+      result: '19-sheet lean drawing set — full structural design for a modest budget without over-design.',
+      tags: ['ETABS', 'AutoCAD', 'BNBC 2020'] }
   ];
 
   /* ---- Marquee tool rows ---- */
@@ -145,34 +171,9 @@
     'BNBC 2020 / ACI Compliance Reviewer'
   ];
 
-  /* ====================================================================
-     RENDER: projects
+    /* ====================================================================
+     RENDER: projects — horizontal auto carousel + detail modal
      ==================================================================== */
-  function frameArt() {
-    var hatch = '';
-    for (var i = 0; i < 18; i++) hatch += '<line x1="' + (20 + i * 20) + '" y1="152" x2="' + (12 + i * 20) + '" y2="163"/>';
-    var nodes = '';
-    [80, 200, 320].forEach(function (x) {
-      [34, 74, 113, 152].forEach(function (y) {
-        nodes += '<circle cx="' + x + '" cy="' + y + '" r="3.2" fill="currentColor" stroke="none"/>';
-      });
-    });
-    return '<svg viewBox="0 0 400 180" class="absolute inset-0 h-full w-full" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">' +
-      '<line x1="14" y1="152" x2="386" y2="152" stroke-width="2.2" opacity=".6"/>' +
-      '<g opacity=".45">' + hatch + '</g>' +
-      '<g stroke-width="2.2">' +
-        '<line x1="80" y1="152" x2="80" y2="34"/><line x1="200" y1="152" x2="200" y2="34"/><line x1="320" y1="152" x2="320" y2="34"/>' +
-        '<line x1="80" y1="34" x2="320" y2="34"/>' +
-      '</g>' +
-      '<g stroke-width="1.4" opacity=".85">' +
-        '<line x1="80" y1="74" x2="320" y2="74"/><line x1="80" y1="113" x2="320" y2="113"/>' +
-      '</g>' +
-      '<g opacity=".55"><line x1="80" y1="113" x2="200" y2="74"/><line x1="200" y1="113" x2="320" y2="74"/></g>' +
-      '<g opacity=".3"><line x1="80" y1="74" x2="200" y2="34"/><line x1="200" y1="74" x2="320" y2="34"/></g>' +
-      nodes +
-    '</svg>';
-  }
-
   var ACCENT = {
     blue:    { text: 'text-blue-400',    chip: 'bg-blue-950/70 text-blue-400 border-blue-800/50',    art: 'text-blue-500/35' },
     amber:   { text: 'text-amber-400',   chip: 'bg-amber-950/70 text-amber-400 border-amber-800/50',  art: 'text-amber-500/30' },
@@ -181,38 +182,148 @@
     sky:     { text: 'text-sky-400',     chip: 'bg-sky-950/70 text-sky-400 border-sky-800/50',        art: 'text-sky-500/30' }
   };
 
-  function renderProjects() {
-    var grid = $('#project-grid');
-    if (!grid) return;
-    grid.innerHTML = PROJECTS.map(function (p, i) {
-      var a = ACCENT[p.accent] || ACCENT.blue;
-      var num = String(i + 1).padStart(2, '0');
-      var tags = p.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
-      return '' +
-      '<article class="group glass-panel rounded-3xl border border-slate-800 overflow-hidden flex flex-col ' +
-               'hover:border-blue-500/50 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-blue-950/40 transition-all duration-300" data-reveal>' +
-        '<div class="project-art relative h-40 border-b border-slate-800 overflow-hidden ' + a.art + '">' +
-          frameArt() +
-          '<span class="absolute right-4 top-3 font-mono text-[10px] font-bold tracking-widest ' + a.text + ' opacity-80">PDF</span>' +
-          '<span class="absolute left-4 bottom-1 font-heading text-5xl font-extrabold text-white/[0.07] group-hover:text-white/[0.12] transition-colors">' + num + '</span>' +
-        '</div>' +
-        '<div class="p-5 flex flex-col flex-1">' +
-          '<span class="self-start px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider mb-3 ' + a.chip + '">' + p.cat + '</span>' +
-          '<h3 class="font-heading text-lg font-bold text-white leading-snug">' + p.title + '</h3>' +
-          '<p class="text-slate-400 text-sm mt-2.5 leading-relaxed flex-1">' + p.desc + '</p>' +
-          '<div class="flex flex-wrap gap-1.5 mt-4">' + tags + '</div>' +
-          '<a href="assets/img/projects/' + p.file + '" target="_blank" rel="noopener" ' +
-             'class="mt-6 inline-flex items-center gap-2 text-sm font-bold ' + a.text + ' hover:text-white transition-colors">' +
-            icon('i-file-pdf') + ' Open Project (PDF)' +
-            icon('i-arrow-up-right-from-square', 'text-[10px]') +
-          '</a>' +
-        '</div>' +
-      '</article>';
-    }).join('');
+  var ProjCarousel = (function () {
+    var AUTOPLAY = 3800;
+    var items = [], idx = 0, timer = null, modalOpen = false;
+    var stage, curEl, totEl, statusEl;
+    var onScreen = false, paused = false;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function build() {
+      stage = $('#project-stage');
+      if (!stage) return false;
+      curEl = $('#project-current'); totEl = $('#project-total');
+      statusEl = $('#project-status');
+      PROJECTS.forEach(function (p, i) {
+        var a = ACCENT[p.accent] || ACCENT.blue;
+        var el = document.createElement('article');
+        el.className = 'proj-item';
+        el.setAttribute('role', 'group');
+        el.setAttribute('aria-roledescription', 'slide');
+        el.setAttribute('aria-label', (i + 1) + ' of ' + PROJECTS.length + ': ' + p.title);
+        el.innerHTML =
+          '<div class="proj-card glass-panel rounded-3xl border border-slate-800 overflow-hidden flex flex-col h-full">' +
+            '<div class="proj-media relative overflow-hidden">' +
+              '<img src="' + p.img + '" alt="' + p.title + '" loading="lazy" class="w-full h-full object-cover transition-transform duration-500">' +
+              '<span class="absolute left-4 top-3 px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider ' + a.chip + '">' + p.cat + '</span>' +
+            '</div>' +
+            '<div class="p-5 flex flex-col flex-1 text-left">' +
+              '<h3 class="font-heading text-lg font-bold text-white leading-snug">' + p.title + '</h3>' +
+              '<p class="text-slate-400 text-xs mt-1.5">' + p.storey + ' &middot; ' + p.location + ' &middot; Client: ' + p.client + '</p>' +
+              '<div class="flex flex-wrap gap-1.5 mt-3">' + p.tags.slice(0, 3).map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('') + '</div>' +
+              '<span class="proj-open mt-auto pt-4 inline-flex items-center gap-2 text-sm font-bold ' + a.text + '">' +
+                'View Details ' + icon('i-arrow-right', 'text-[10px]') + '</span>' +
+            '</div>' +
+          '</div>';
+        el.addEventListener('click', function () {
+          if (i === idx) openModal(p, el);
+          else { idx = i; render(); restart(); }
+        });
+        stage.appendChild(el);
+        items.push(el);
+      });
+      if (totEl) totEl.textContent = String(PROJECTS.length).padStart(2, '0');
+      return true;
+    }
+
+    function render() {
+      var total = items.length;
+      items.forEach(function (el, i) {
+        var off = i - idx;
+        if (off >  total / 2) off -= total;
+        if (off < -total / 2) off += total;
+        var abs = Math.abs(off);
+        el.classList.toggle('is-center', abs === 0);
+        if (abs === 0) {
+          el.style.cssText = 'opacity:1;transform:translateX(-50%) scale(1);z-index:10;pointer-events:auto;';
+        } else if (abs === 1) {
+          el.style.cssText = 'opacity:.45;transform:translateX(-50%) translateX(' + (off * 66) + '%) scale(.82);z-index:5;pointer-events:auto;';
+        } else {
+          el.style.cssText = 'opacity:0;transform:translateX(-50%) translateX(' + (off * 78) + '%) scale(.7);z-index:0;pointer-events:none;';
+        }
+        el.setAttribute('aria-hidden', abs === 0 ? 'false' : 'true');
+      });
+      if (curEl) curEl.textContent = String(idx + 1).padStart(2, '0');
+      if (statusEl) statusEl.textContent = 'Project ' + (idx + 1) + ' of ' + items.length + ': ' + PROJECTS[idx].title;
+    }
+
+    function next() { idx = (idx + 1) % items.length; render(); }
+    function prev() { idx = (idx - 1 + items.length) % items.length; render(); }
+    function start() { stop(); if (!reduced) timer = setInterval(next, AUTOPLAY); }
+    function stop()  { if (timer) { clearInterval(timer); timer = null; } }
+    function updateAutoplay() {
+      if (onScreen && !paused && !modalOpen && !document.hidden) start(); else stop();
+    }
+    function restart() { stop(); updateAutoplay(); }
+
+    function wire() {
+      var pb = $('#project-prev'), nb = $('#project-next');
+      if (pb) pb.addEventListener('click', function () { prev(); restart(); });
+      if (nb) nb.addEventListener('click', function () { next(); restart(); });
+      stage.addEventListener('mouseenter', function () { paused = true;  updateAutoplay(); });
+      stage.addEventListener('mouseleave', function () { paused = false; updateAutoplay(); });
+      stage.addEventListener('focusin',  function () { paused = true;  updateAutoplay(); });
+      stage.addEventListener('focusout', function () { paused = false; updateAutoplay(); });
+      stage.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); next(); restart(); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); prev(); restart(); }
+      });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; updateAutoplay(); }, { threshold: 0.2 }).observe(stage);
+      } else { onScreen = true; }
+      document.addEventListener('visibilitychange', updateAutoplay);
+    }
+
+    return {
+      init: function () { if (build()) { render(); wire(); updateAutoplay(); } },
+      setModalOpen: function (v) { modalOpen = v; updateAutoplay(); }
+    };
+  })();
+
+  /* ---- project detail modal ---- */
+  var pmLastFocus = null;
+  function pmChip(ic, txt) {
+    return '<span class="pm-chip">' + icon(ic) + '<span>' + txt + '</span></span>';
+  }
+  function openModal(p, fromEl) {
+    var m = $('#proj-modal'); if (!m) return;
+    pmLastFocus = fromEl || document.activeElement;
+    var img = $('#pm-img'); img.src = p.img; img.alt = p.title;
+    var cat = $('#pm-cat'); cat.textContent = p.cat;
+    cat.className = 'pm-cat ' + ((ACCENT[p.accent] || ACCENT.blue).chip);
+    $('#pm-title').textContent = p.title;
+    $('#pm-meta').innerHTML =
+      pmChip('i-building', p.storey) + pmChip('i-location-dot', p.location) + pmChip('i-building-user', p.client);
+    $('#pm-role').textContent = p.role;
+    $('#pm-scope').textContent = p.scope;
+    $('#pm-challenge').textContent = p.challenge;
+    $('#pm-solution').textContent = p.solution;
+    $('#pm-result').textContent = p.result;
+    $('#pm-tags').innerHTML = p.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    m.classList.remove('hidden');
+    requestAnimationFrame(function () { m.classList.add('is-open'); });
+    document.body.classList.add('modal-lock');
+    ProjCarousel.setModalOpen(true);
+    var c = m.querySelector('.proj-modal__close'); if (c) c.focus();
+  }
+  function closeModal() {
+    var m = $('#proj-modal'); if (!m || m.classList.contains('hidden')) return;
+    m.classList.remove('is-open');
+    document.body.classList.remove('modal-lock');
+    ProjCarousel.setModalOpen(false);
+    setTimeout(function () { m.classList.add('hidden'); }, 260);
+    if (pmLastFocus && pmLastFocus.focus) pmLastFocus.focus();
+  }
+  function initProjectModal() {
+    var m = $('#proj-modal'); if (!m) return;
+    m.addEventListener('click', function (e) { if (e.target.closest('[data-pm-close]')) closeModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !m.classList.contains('hidden')) closeModal();
+    });
   }
 
   /* ====================================================================
-     RENDER: skills
+     RENDER: skills     RENDER: skills
      ==================================================================== */
   function renderSkills() {
     var grid = $('#skills-grid');
@@ -840,7 +951,8 @@
      BOOT
      ==================================================================== */
   function boot() {
-    renderProjects();
+    ProjCarousel.init();
+    initProjectModal();
     renderSkills();
     renderCerts();
     renderMarquee();

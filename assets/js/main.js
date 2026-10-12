@@ -676,6 +676,148 @@
   }
 
   /* ====================================================================
+     SKILL RADAR CHART  (✏️ values 0–100 নিচে বদলানো যায়)
+     ==================================================================== */
+  var RADAR = [
+    { label: 'Structural (ETABS)',  v: 92 },
+    { label: 'Codal (BNBC/ACI)',    v: 88 },
+    { label: 'Drafting & BIM',      v: 90 },
+    { label: 'GIS & Spatial',       v: 82 },
+    { label: 'Python & Automation', v: 78 },
+    { label: 'Hydraulics',          v: 72 }
+  ];
+
+  function initRadar() {
+    var cv = $('#skill-radar');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    if (!ctx) return;
+    var drawn = false;
+
+    function draw(progress) {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = cv.clientWidth || 520, h = 380;
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      var cx = w / 2, cy = h / 2 + 4;
+      var R = Math.min(w, h) / 2 - 58;
+      var n = RADAR.length, i, a;
+
+      ctx.lineWidth = 1;
+      for (var g = 1; g <= 4; g++) {                      // rings
+        ctx.strokeStyle = 'rgba(148,163,184,0.14)';
+        ctx.beginPath();
+        for (i = 0; i <= n; i++) {
+          a = (Math.PI * 2 * (i % n) / n) - Math.PI / 2;
+          var rr = R * g / 4;
+          i ? ctx.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr)
+            : ctx.moveTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr);
+        }
+        ctx.stroke();
+      }
+
+      ctx.font = '600 11px Outfit, sans-serif';           // spokes + labels
+      for (i = 0; i < n; i++) {
+        a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        ctx.strokeStyle = 'rgba(148,163,184,0.12)';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.textAlign = Math.abs(Math.cos(a)) < 0.35 ? 'center' : (Math.cos(a) > 0 ? 'left' : 'right');
+        ctx.textBaseline = 'middle';
+        ctx.fillText(RADAR[i].label, cx + Math.cos(a) * (R + 26), cy + Math.sin(a) * (R + 20));
+      }
+
+      ctx.beginPath();                                    // value polygon
+      for (i = 0; i <= n; i++) {
+        a = (Math.PI * 2 * (i % n) / n) - Math.PI / 2;
+        var rv = R * (RADAR[i % n].v / 100) * progress;
+        i ? ctx.lineTo(cx + Math.cos(a) * rv, cy + Math.sin(a) * rv)
+          : ctx.moveTo(cx + Math.cos(a) * rv, cy + Math.sin(a) * rv);
+      }
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(59,130,246,0.22)';
+      ctx.fill();
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      for (i = 0; i < n; i++) {                           // vertex dots
+        a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        var rd = R * (RADAR[i].v / 100) * progress;
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(a) * rd, cy + Math.sin(a) * rd, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function animate() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { draw(1); return; }
+      var t0 = null, dur = 1100;
+      requestAnimationFrame(function step(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        draw(1 - Math.pow(1 - p, 3));
+        if (p < 1) requestAnimationFrame(step);
+      });
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries, io) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && !drawn) { drawn = true; animate(); io.disconnect(); }
+        });
+      }, { threshold: 0.3 }).observe(cv);
+    } else { animate(); }
+
+    var rt = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { draw(1); }, 180);
+    });
+  }
+
+  /* ====================================================================
+     COPY BUTTONS (email / phone / WhatsApp)
+     ==================================================================== */
+  function initCopy() {
+    $$('[data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = b.getAttribute('data-copy');
+        var span = b.querySelector('span');
+        function done() {
+          b.classList.add('copied');
+          if (span) span.textContent = 'Copied!';
+          setTimeout(function () {
+            b.classList.remove('copied');
+            if (span) span.textContent = 'Copy';
+          }, 1600);
+        }
+        function legacy() {
+          var t = document.createElement('textarea');
+          t.value = v;
+          t.style.position = 'fixed';
+          t.style.opacity = '0';
+          document.body.appendChild(t);
+          t.select();
+          try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+          document.body.removeChild(t);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(v).then(done, function () { legacy(); done(); });
+        } else { legacy(); done(); }
+      });
+    });
+  }
+
+  /* ====================================================================
      BOOT
      ==================================================================== */
   function boot() {
@@ -692,6 +834,8 @@
     initScrollSpy();
     initMenu();
     initForm();
+    initRadar();
+    initCopy();
 
     var y = $('#year');
     if (y) y.textContent = String(new Date().getFullYear());

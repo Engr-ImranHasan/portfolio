@@ -297,7 +297,7 @@
      RENDER: memories carousel
      ==================================================================== */
   var Carousel = (function () {
-    var AUTOPLAY = 4000;
+    var AUTOPLAY = 3000;
     var stage, thumbs, curEl, totEl, statusEl;
     var items = [], thumbEls = [], idx = 0, timer = null;
     var onScreen = false, paused = false;   // autoplay gating state
@@ -634,6 +634,15 @@
     var status = $('#cf-status'), btn = $('#cf-submit');
     var label  = btn ? btn.querySelector('.cf-label') : null;
     var original = label ? label.innerHTML : '';
+    var success = $('#cf-success'), again = $('#cf-again');
+
+    // "Send another message" — hide the success card, show the form again
+    if (again) again.addEventListener('click', function () {
+      if (success) success.classList.add('hidden');
+      form.classList.remove('hidden');
+      status.textContent = '';
+      if (btn) btn.focus();
+    });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -658,8 +667,18 @@
       }).then(function (res) {
         if (res.ok) {
           form.reset();
-          status.className = 'text-sm font-medium text-emerald-400';
-          status.textContent = '✓ Message sent — I will reply within 24 hours.';
+          status.textContent = '';
+          if (success) {
+            form.classList.add('hidden');
+            success.classList.remove('hidden');
+            // restart the CSS draw animation if the card is shown again
+            success.classList.remove('cf-success--play');
+            void success.offsetWidth;
+            success.classList.add('cf-success--play');
+          } else {
+            status.className = 'text-sm font-medium text-emerald-400';
+            status.textContent = '✓ Thank you for your message — I will reply within 24 hours.';
+          }
         } else {
           return res.json().catch(function () { return {}; }).then(function (d) {
             throw new Error((d.errors && d.errors[0] && d.errors[0].message) || 'Something went wrong.');

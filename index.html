@@ -266,7 +266,7 @@
     </div>
     <div data-reveal style="--reveal-delay:200ms">
       <h3 class="font-heading text-4xl sm:text-5xl font-extrabold text-white">
-        <span data-count="16">0</span><span class="text-blue-500">+</span>
+        <span data-count="21">0</span><span class="text-blue-500">+</span>
       </h3>
       <p class="text-slate-400 text-xs sm:text-sm uppercase tracking-widest mt-2 font-semibold">Professional Certifications</p>
     </div>
@@ -620,9 +620,11 @@
       <p class="text-slate-400 text-sm max-w-md">Verified training programmes spanning structural analysis, hydraulic modelling, GIS automation and AI integration.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="cert-grid">
-      <!-- rendered by main.js from CERTIFICATIONS -->
+    <div id="cert-grid" class="cert-marquee" aria-label="Certifications: click a card to view the certificate">
+      <div class="cert-row" id="cert-row-1"><!-- rendered by main.js --></div>
+      <div class="cert-row cert-row--rev" id="cert-row-2"><!-- rendered by main.js --></div>
     </div>
+    <p class="text-center text-[11px] text-slate-500 mt-5">Hover or tap a row to pause &middot; click any card to view the certificate</p>
   </div>
 </section>
 
@@ -965,6 +967,26 @@
 </button>
 
 <!-- ══════════════ PROJECT DETAIL MODAL ══════════════ -->
+<!-- ══════════════ CERTIFICATE DETAIL MODAL ══════════════ -->
+<div id="cert-modal" class="proj-modal cert-modal hidden" role="dialog" aria-modal="true" aria-labelledby="cm-title">
+  <div class="proj-modal__backdrop" data-cm-close></div>
+  <div class="proj-modal__dialog glass-panel">
+    <button type="button" class="proj-modal__close" data-cm-close aria-label="Close certificate details">
+      <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-xmark"></use></svg>
+    </button>
+    <div class="cert-modal__media">
+      <img id="cm-img" src="" alt="" hidden>
+      <div id="cm-noimg" class="cert-modal__noimg" hidden>Certificate image not added yet</div>
+    </div>
+    <div class="cert-modal__info">
+      <span id="cm-plat" class="pm-cat"></span>
+      <h3 id="cm-title" class="font-heading text-xl sm:text-2xl font-bold text-white leading-snug mt-3"></h3>
+      <div id="cm-meta" class="flex flex-wrap gap-2 mt-4"></div>
+      <div class="pm-block"><h4>About this course</h4><p id="cm-desc"></p></div>
+    </div>
+  </div>
+</div>
+
 <div id="proj-modal" class="proj-modal hidden" role="dialog" aria-modal="true" aria-labelledby="pm-title">
   <div class="proj-modal__backdrop" data-pm-close></div>
   <div class="proj-modal__dialog glass-panel">

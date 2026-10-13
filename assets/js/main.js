@@ -394,20 +394,96 @@
              '<div class="cert-set" aria-hidden="true">' + ghost + '</div>' +
            '</div>';
   }
+  /* ---- Certification marquee: auto-moves, pauses on hover/touch, drag to move ----
+     Position is driven by JS (translate3d) so mouse / touch drag and auto-move share one value.
+     Two identical sets in the track + wrap() keep the loop seamless. */
+  var CertMarquee = (function () {
+    var SPEED = 36;                 /* px per second */
+    var rows = [], raf = 0, last = 0;
+
+    function wrap(x, half) { x = x % half; if (x > 0) x -= half; return x; }
+    function apply(s) { s.track.style.transform = 'translate3d(' + s.x.toFixed(2) + 'px,0,0)'; }
+    function measure(s) { s.half = s.track.children[0].offsetWidth || 1; s.x = wrap(s.x, s.half); apply(s); }
+
+    function setup(el, dir) {
+      var s = { el: el, track: el.querySelector('.cert-track'), dir: dir, x: 0, half: 1,
+                hover: false, hold: false, holdT: null, drag: null, moved: false };
+
+      /* mouse hover pauses (touch is handled by `hold`, so taps don't freeze the row) */
+      el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') s.hover = true; });
+      el.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') s.hover = false; });
+
+      /* touch: hold still while the finger is on the row */
+      el.addEventListener('touchstart', function () { clearTimeout(s.holdT); s.hold = true; }, { passive: true });
+      ['touchend', 'touchcancel'].forEach(function (ev) {
+        el.addEventListener(ev, function () {
+          clearTimeout(s.holdT);
+          s.holdT = setTimeout(function () { s.hold = false; }, 1200);
+        }, { passive: true });
+      });
+
+      /* drag (mouse + touch; touch-action: pan-y keeps vertical page scroll) */
+      el.addEventListener('pointerdown', function (e) {
+        if (e.button > 0) return;
+        s.drag = { x0: e.clientX, pos0: s.x, id: e.pointerId };
+        s.moved = false;
+        el.classList.add('is-dragging');
+      });
+      window.addEventListener('pointermove', function (e) {
+        if (!s.drag || e.pointerId !== s.drag.id) return;
+        var dx = e.clientX - s.drag.x0;
+        if (!s.moved && Math.abs(dx) < 5) return;
+        s.moved = true;
+        s.x = wrap(s.drag.pos0 + dx, s.half);
+        apply(s);
+      });
+      function endDrag(e) {
+        if (!s.drag || (e && e.pointerId !== s.drag.id)) return;
+        s.drag = null;
+        el.classList.remove('is-dragging');
+      }
+      window.addEventListener('pointerup', endDrag);
+      window.addEventListener('pointercancel', endDrag);
+
+      /* a real drag must not open a certificate: swallow the click that follows it */
+      el.addEventListener('click', function (e) {
+        if (s.moved) { e.preventDefault(); e.stopPropagation(); s.moved = false; }
+      }, true);
+      return s;
+    }
+
+    function tick(now) {
+      var dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+      last = now;
+      var grid = document.getElementById('cert-grid');
+      var globalPause = document.hidden || !!(grid && grid.classList.contains('is-paused'));
+      rows.forEach(function (s) {
+        if (globalPause || s.drag || s.hover || s.hold || s.el.matches(':focus-within')) return;
+        s.x = wrap(s.x + s.dir * SPEED * dt, s.half);
+        apply(s);
+      });
+      raf = requestAnimationFrame(tick);
+    }
+
+    function init(els) {
+      /* reduced motion: no auto-move; rows stay native horizontally scrollable */
+      if (!window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      rows = els.map(function (el, i) { return setup(el, i === 0 ? -1 : 1); });
+      function measureAll() { rows.forEach(measure); }
+      measureAll();
+      window.addEventListener('resize', measureAll);
+      raf = requestAnimationFrame(tick);
+    }
+    return { init: init };
+  })();
+
   function renderCerts() {
     var r1 = $('#cert-row-1'), r2 = $('#cert-row-2');
     if (!r1 || !r2) return;
     var half = Math.ceil(CERTS.length / 2);
     r1.innerHTML = certRowHTML(0, half);
     r2.innerHTML = certRowHTML(half, CERTS.length);
-    [r1, r2].forEach(function (row) {
-      /* touch: hold a row still while the finger is on it */
-      var t = null;
-      row.addEventListener('touchstart', function () { clearTimeout(t); row.classList.add('is-paused'); }, { passive: true });
-      ['touchend', 'touchcancel'].forEach(function (ev) {
-        row.addEventListener(ev, function () { t = setTimeout(function () { row.classList.remove('is-paused'); }, 1200); }, { passive: true });
-      });
-    });
+    CertMarquee.init([r1, r2]);
     $('#cert-grid').addEventListener('click', function (e) {
       var b = e.target.closest('[data-cert]');
       if (b) openCertModal(+b.getAttribute('data-cert'), b);

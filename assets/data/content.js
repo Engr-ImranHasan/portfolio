@@ -2,11 +2,11 @@ window.SITE_CONTENT = {
   "texts": {
     "nav:1>div:1>div:1": {
       "o": "Projects Experience Skills Tools Certifications Research Memories",
-      "h": "\n      <a href=\"#projects\" class=\"nav-link is-active\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
+      "h": "\n      <a href=\"#projects\" class=\"nav-link\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link is-active\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
     },
     "main:1>section:4>div:1>div:2>div:2>span:1": {
       "o": "01 / 08",
-      "h": "\n          <span id=\"project-current\" class=\"text-white font-bold\">04</span> / <span id=\"project-total\">08</span>\n        "
+      "h": "\n          <span id=\"project-current\" class=\"text-white font-bold\">02</span> / <span id=\"project-total\">08</span>\n        "
     }
   },
   "attrs": {},
@@ -240,7 +240,7 @@ window.SITE_CONTENT = {
           "kind": "plain"
         },
         {
-          "name": "AI Integration",
+          "name": "AI Integration & AI Agent",
           "note": "ChatGPT & Gemini for Automation",
           "badge": "Modern",
           "kind": "amber"
@@ -254,7 +254,7 @@ window.SITE_CONTENT = {
       "icon": "i-laptop-code",
       "items": [
         {
-          "name": "MS Office (Project, Word, Excel, PowerPoint)",
+          "name": "MS Project, Word, Excel, PowerPoint",
           "note": "Professional Engineering Suite",
           "badge": "Proficient",
           "kind": "emerald"

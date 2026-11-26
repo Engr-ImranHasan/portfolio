@@ -219,7 +219,7 @@
               '<img src="' + p.img + '" alt="' + p.title + '" loading="lazy" class="w-full h-full object-cover transition-transform duration-500">' +
               '<span class="absolute left-4 top-3 px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider ' + a.chip + '">' + p.cat + '</span>' +
             '</div>' +
-            '<div class="p-5 flex flex-col flex-1 text-left">' +
+            '<div class="proj-body p-5 flex flex-col text-left">' +
               '<h3 class="font-heading text-lg font-bold text-white leading-snug">' + p.title + '</h3>' +
               '<p class="text-slate-400 text-xs mt-1.5">' + p.storey + ' &middot; ' + p.location + ' &middot; Client: ' + p.client + '</p>' +
               '<div class="flex flex-wrap gap-1.5 mt-3">' + p.tags.slice(0, 3).map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('') + '</div>' +
@@ -1231,19 +1231,20 @@
     accents: Object.keys(ACCENT)
   };
 
-  /* ---- Testimonials: horizontal auto-move, seamless loop ----
-     Real cards stay in [data-block="testimonials"] so the editor saves them as before.
-     JS moves that block into a track and adds aria-hidden copies (data-clone), which
-     the editor ignores. Copies are rebuilt on resize, and on the next page load after an edit. */
-  var TestiMarquee = (function () {
+  /* ---- Horizontal auto-move rows (seamless loop) ----
+     Used by testimonials and the Tools & Automation cards. The real items stay inside their
+     [data-block] container so the editor saves them as before. JS moves that block into a track
+     and adds aria-hidden copies (data-clone), which the editor ignores. Copies are rebuilt on
+     resize and on the next page load after an edit. */
+  var AutoRows = (function () {
     var SPEED = 28;                 /* px per second */
-    var s = null, raf = 0, last = 0;
+    var rows = [], raf = 0, last = 0;
 
     function reduced() { return !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
     function wrap(x, w) { x = x % w; if (x > 0) x -= w; return x; }
-    function apply() { s.track.style.transform = 'translate3d(' + s.x.toFixed(2) + 'px,0,0)'; }
+    function apply(s) { s.track.style.transform = 'translate3d(' + s.x.toFixed(2) + 'px,0,0)'; }
 
-    function build() {
+    function build(s) {
       s.clones.forEach(function (c) { c.remove(); });
       s.clones = [];
       s.w = s.set.offsetWidth || 1;
@@ -1262,21 +1263,24 @@
         s.clones.push(c);
       }
       s.x = wrap(s.x, s.w);
-      apply();
+      apply(s);
     }
 
     function tick(now) {
       var dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
       last = now;
       /* pause: tab hidden, mouse over, finger on the row, or the editor is open */
-      var paused = document.hidden || s.hover || s.hold || !!document.getElementById('ed-bar');
-      if (!paused && s.w > 1) { s.x = wrap(s.x - SPEED * dt, s.w); apply(); }
+      var editing = !!document.getElementById('ed-bar');
+      rows.forEach(function (s) {
+        var paused = document.hidden || editing || s.hover || s.hold;
+        if (!paused && s.w > 1) { s.x = wrap(s.x - SPEED * dt, s.w); apply(s); }
+      });
       raf = requestAnimationFrame(tick);
     }
 
-    function init() {
-      var set = $('[data-block="testimonials"]');
-      if (!set || !set.parentNode || reduced()) return;   /* reduced motion: stays a static grid */
+    function add(blockName) {
+      var set = $('[data-block="' + blockName + '"]');
+      if (!set || !set.parentNode) return;
       var vp = document.createElement('div');
       vp.className = 'testi-viewport';
       var track = document.createElement('div');
@@ -1285,8 +1289,7 @@
       track.appendChild(set);
       vp.appendChild(track);
       set.classList.add('testi-set');
-      s = { vp: vp, track: track, set: set, clones: [], x: 0, w: 1, hover: false, hold: false, holdT: null };
-
+      var s = { name: blockName, vp: vp, track: track, set: set, clones: [], x: 0, w: 1, hover: false, hold: false, holdT: null };
       vp.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') s.hover = true; });
       vp.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') s.hover = false; });
       vp.addEventListener('touchstart', function () { clearTimeout(s.holdT); s.hold = true; }, { passive: true });
@@ -1296,18 +1299,24 @@
           s.holdT = setTimeout(function () { s.hold = false; }, 1200);
         }, { passive: true });
       });
-
-      build();
+      build(s);
       var rt = 0;
-      window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
-      raf = requestAnimationFrame(tick);
+      window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { build(s); }, 150); });
+      rows.push(s);
+    }
+
+    function init(names) {
+      /* reduced motion: stays a static grid */
+      if (reduced()) return;
+      names.forEach(add);
+      if (rows.length) raf = requestAnimationFrame(tick);
     }
     return { init: init };
   })();
 
   function boot() {
     applyContent(window.SITE_CONTENT);
-    TestiMarquee.init();
+    AutoRows.init(['testimonials', 'tools']);
     ProjCarousel.init();
     initProjectModal();
     initCertModal();

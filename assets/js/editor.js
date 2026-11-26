@@ -21,7 +21,7 @@
   // SHA-256 of the edit password (the password itself is not written here).
   var PASS_SHA256 = '6178b6896bade1aa91a57ecbaca2396f6a9debe523ffe4201100629f46611b2a';
   var TOKEN_KEY = 'ed-gh-token';
-  var BLOCK_LABELS = { experience: 'Experience', testimonials: 'Testimonials', research: 'Publications', education: 'Education' };
+  var BLOCK_LABELS = { experience: 'Experience', testimonials: 'Testimonials', research: 'Publications', education: 'Education', tools: 'Tool card' };
 
   /* ---------- helpers ---------- */
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -610,11 +610,19 @@
     });
   }
   function putFile(p, base64, message) {
-    return getSha(p).then(function (sha) {
-      var body = { message: message, content: base64, branch: CFG.branch };
-      if (sha) body.sha = sha;
-      return gh(repoPath(p), { method: 'PUT', body: body });
-    });
+    /* Re-read the SHA on every attempt. A 409 means the file changed between the read and the write
+       (for example an overlapping save), so retry once with the fresh SHA. */
+    function attempt(n) {
+      return getSha(p).then(function (sha) {
+        var body = { message: message, content: base64, branch: CFG.branch };
+        if (sha) body.sha = sha;
+        return gh(repoPath(p), { method: 'PUT', body: body }).catch(function (e) {
+          if (e.status === 409 && n < 2) return attempt(n + 1);
+          throw e;
+        });
+      });
+    }
+    return attempt(1);
   }
 
   /* ---------- save ---------- */
@@ -645,8 +653,11 @@
     return blocks;
   }
 
+  var saving = false;   /* one save at a time: a double-click must not race itself */
   function saveToSite() {
+    if (saving) return;
     if (!getToken()) { openSettings('আগে GitHub token দিন।'); return; }
+    saving = true;
     var content = {
       texts: collectTexts(), attrs: collectAttrs(), blocks: collectBlocks(),
       projects: W.projects, skills: W.skills, certs: W.certs, memories: W.memories,
@@ -669,9 +680,12 @@
     }).then(function () {
       pending = {};
       dirty = false;
+      saving = false;
       setStatus('Save হয়েছে ✓ — live site ১–৩ মিনিটে update হবে (browser cache-এর জন্য একটু দেরি হতে পারে)।');
     }, function (e) {
-      var hint = e.status === 401 ? ' (token ভুল বা মেয়াদ শেষ)' : e.status === 403 ? ' (token-এ লেখার অনুমতি নেই)' : '';
+      saving = false;
+      var hint = e.status === 401 ? ' (token ভুল বা মেয়াদ শেষ)' : e.status === 403 ? ' (token-এ লেখার অনুমতি নেই)' :
+                 e.status === 409 ? ' (একই সময়ে অন্য save চলছিল — page reload করে আবার Save চাপুন)' : '';
       setStatus('Save হয়নি: ' + e.message + hint, true);
     });
   }

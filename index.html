@@ -58,7 +58,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
 <!-- ══════════════════ STYLES (built, no CDN) ══════════════════ -->
-<link rel="stylesheet" href="assets/css/styles.css?v=8">
+<link rel="stylesheet" href="assets/css/styles.css?v=11">
 
 <!--
   JS-safety guard. Adds `.js` to <html> so scroll-reveal can hide elements.
@@ -158,15 +158,15 @@
     <!-- ── text side ── -->
     <div class="lg:col-span-7 space-y-7" data-reveal>
 
-      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] sm:text-xs font-bold tracking-widest uppercase">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
+      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] sm:text-xs font-bold tracking-widest uppercase">
+        <span class="relative flex h-3.5 w-3.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
         </span>
-        Open to Structural &amp; GIS Projects
+        <span data-edit="badge">Open to Structural &amp; GIS Projects</span>
       </div>
 
-      <h1 class="font-heading text-[2.6rem] leading-[1.08] sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white">
+      <h1 data-edit="hero-title" class="font-heading text-[2.6rem] leading-[1.08] sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white">
         Designing Resilient<br>
         <span class="gradient-text">Infrastructure Solutions</span>
       </h1>
@@ -178,7 +178,7 @@
         <span class="inline-block w-[2px] h-4 bg-blue-400 animate-pulse"></span>
       </p>
 
-      <p class="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-2xl font-light">
+      <p data-edit="hero-bio" class="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-2xl font-light">
         A results-driven <strong class="text-white font-semibold">Civil &amp; Structural Engineer</strong> and proud
         <strong class="text-white font-semibold">SUST</strong> graduate with
         <strong class="text-blue-400 font-semibold">02+ years</strong> of professional experience — from engineering
@@ -266,7 +266,7 @@
     </div>
     <div data-reveal style="--reveal-delay:200ms">
       <h3 class="font-heading text-4xl sm:text-5xl font-extrabold text-white">
-        <span data-count="21">0</span><span class="text-blue-500">+</span>
+        <span data-count="21" data-live="certs">0</span><span class="text-blue-500">+</span>
       </h3>
       <p class="text-slate-400 text-xs sm:text-sm uppercase tracking-widest mt-2 font-semibold">Professional Certifications</p>
     </div>
@@ -302,12 +302,12 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-diagram-project"></use></svg> Portfolio
       </div>
-      <h2 class="section-title">Selected Projects</h2>
+      <h2 class="section-title" data-edit="title-1">Selected Projects</h2>
       <div class="section-rule mx-auto mt-5"></div>
       <p class="text-slate-400 mt-4 text-sm sm:text-base">Real buildings I designed under EPCT — from G+3 residences to a B+G+13 tower. Click any project for role, scope, challenge → solution → result and software used.</p>
     </div>
 
-    <div class="relative w-full max-w-6xl mx-auto px-4 select-none" data-reveal>
+    <div class="relative w-full max-w-6xl mx-auto px-4 select-none clip-x-mobile" data-reveal>
       <div id="project-stage" class="relative h-[470px] sm:h-[500px] w-full overflow-visible"
            tabindex="0" role="group" aria-roledescription="carousel" aria-label="Selected projects">
         <p id="project-status" class="sr-only" aria-live="polite"></p>
@@ -341,11 +341,11 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-briefcase"></use></svg> Experience
       </div>
-      <h2 class="section-title">Employment History</h2>
+      <h2 class="section-title" data-edit="title-2">Employment History</h2>
       <div class="section-rule mx-auto mt-6"></div>
     </div>
 
-    <div class="timeline space-y-12">
+    <div class="timeline space-y-12" data-block="experience">
 
       <!-- ── CCECC ── -->
       <article class="tl-item glass-panel p-7 sm:p-10 rounded-3xl border border-slate-800 hover:border-blue-500/50 transition-all duration-500 shadow-2xl group" data-reveal>
@@ -485,11 +485,11 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-quote-left"></use></svg> References
       </div>
-      <h2 class="section-title">What Colleagues Say</h2>
+      <h2 class="section-title" data-edit="title-3">What Colleagues Say</h2>
       <div class="section-rule mx-auto mt-5"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5" data-block="testimonials">
       <!-- ✏️ EDIT: quote-র text টা চাইলে নিজে বদলে নিও -->
       <figure class="glass-panel p-6 sm:p-7 rounded-3xl border border-slate-800 hover:border-blue-500/40 transition-colors" data-reveal>
         <svg class="icon text-3xl text-blue-500/40" aria-hidden="true"><use href="assets/img/icons.svg#i-quote-left"></use></svg>
@@ -529,7 +529,7 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-gears"></use></svg> Core Competencies
       </div>
-      <h2 class="section-title">Skills &amp; Engineering Matrix</h2>
+      <h2 class="section-title" data-edit="title-4">Skills &amp; Engineering Matrix</h2>
       <div class="section-rule mx-auto mt-6"></div>
     </div>
 
@@ -553,7 +553,7 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-code"></use></svg> Open Source &amp; Automation
       </div>
-      <h2 class="section-title">Tools &amp; Automation</h2>
+      <h2 class="section-title" data-edit="title-5">Tools &amp; Automation</h2>
       <div class="section-rule mx-auto mt-5"></div>
       <p class="text-slate-400 mt-4 text-sm sm:text-base">Real code I write to automate engineering workflows — AutoLISP, Python, JavaScript &amp; Excel.</p>
     </div>
@@ -615,7 +615,7 @@
         <div class="section-eyebrow mb-3">
           <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-award"></use></svg> Verified Qualifications
         </div>
-        <h2 class="section-title">Professional Certifications</h2>
+        <h2 class="section-title" data-edit="title-6">Professional Certifications</h2>
       </div>
       <p class="text-slate-400 text-sm max-w-md">Verified training programmes spanning structural analysis, hydraulic modelling, GIS automation and AI integration.</p>
     </div>
@@ -638,11 +638,11 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-book-open"></use></svg> Publications
       </div>
-      <h2 class="section-title">Research &amp; Publications</h2>
+      <h2 class="section-title" data-edit="title-7">Research &amp; Publications</h2>
       <div class="section-rule mx-auto mt-6"></div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7" data-block="research">
 
       <!-- Published -->
       <article class="lg:col-span-12 glass-panel p-7 sm:p-10 rounded-3xl border-l-4 border-emerald-500 group" data-reveal>
@@ -701,11 +701,11 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-graduation-cap"></use></svg> Education
       </div>
-      <h2 class="section-title">Academic Qualifications</h2>
+      <h2 class="section-title" data-edit="title-8">Academic Qualifications</h2>
       <div class="section-rule mx-auto mt-6"></div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" data-block="education">
 
       <div class="glass-panel p-6 rounded-3xl border border-slate-800 relative overflow-hidden text-center hover:border-blue-500/40 transition-colors" data-reveal>
         <div class="absolute top-0 left-0 w-full h-1.5 bg-blue-500"></div>
@@ -771,12 +771,12 @@
     <div class="section-eyebrow mb-4">
       <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-images"></use></svg> Gallery
     </div>
-    <h2 class="section-title">Memories &amp; Moments</h2>
+    <h2 class="section-title" data-edit="title-9">Memories &amp; Moments</h2>
     <p class="text-slate-400 text-sm mt-3">Glimpses of my academic and professional journey.</p>
     <div class="section-rule mx-auto mt-5"></div>
   </div>
 
-  <div class="relative w-full max-w-6xl mx-auto px-4 select-none" data-reveal>
+  <div class="relative w-full max-w-6xl mx-auto px-4 select-none clip-x-mobile" data-reveal>
 
     <div id="carousel-stage" class="relative h-[240px] sm:h-[340px] md:h-[430px] w-full overflow-visible"
          tabindex="0" role="group" aria-roledescription="carousel" aria-label="Memories gallery">
@@ -818,7 +818,7 @@
       <div class="section-eyebrow mb-4">
         <svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-paper-plane"></use></svg> Contact
       </div>
-      <h2 class="section-title">Let’s Connect &amp; Build</h2>
+      <h2 class="section-title" data-edit="title-10">Let’s Connect &amp; Build</h2>
       <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mt-5">
         Open for structural design consultations, mega-infrastructure project coordination,
         and GIS spatial-data analytics collaborations.
@@ -942,7 +942,8 @@
 
     <!-- bottom bar -->
     <div class="pt-10 mt-16 border-t border-slate-800/80 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
-      <p>© <span id="year">2026</span> Imran Hasan — Structural &amp; Computational Engineer</p>
+      <button type="button" id="edit-open" class="ed-open" aria-label="Edit website content">✏ Edit</button>
+      <p data-edit="footer-copy">© <span id="year">2026</span> Imran Hasan — Structural &amp; Computational Engineer</p>
       <div class="flex gap-5 text-lg">
         <a href="https://linkedin.com/in/imran-hasan-385309217" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="hover:text-sky-400 transition-colors"><svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-b-linkedin-in"></use></svg></a>
         <a href="https://wa.me/8801880033622?text=Assalamu%20Alaikum%20Imran%2C%20I%20would%20like%20to%20discuss%E2%80%A6" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="hover:text-[#25D366] transition-colors"><svg class="icon" aria-hidden="true"><use href="assets/img/icons.svg#i-b-whatsapp"></use></svg></a>
@@ -1017,7 +1018,9 @@
 
 <!-- ══════════════ SCRIPTS ══════════════ -->
 <script src="assets/js/truss-bg.js?v=6" defer></script>
-<script src="assets/js/main.js?v=8" defer></script>
+<script src="assets/data/content.js?v=1" defer></script>
+<script src="assets/js/main.js?v=10" defer></script>
+<script src="assets/js/editor.js?v=2" defer></script>
 <noscript>
   <style>[data-reveal]{opacity:1 !important;transform:none !important}</style>
   <p style="text-align:center;padding:1rem;color:#94a3b8">This portfolio works best with JavaScript enabled. You can still reach me at imran.cee23@gmail.com.</p>

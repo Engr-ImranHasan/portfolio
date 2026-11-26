@@ -53,10 +53,45 @@ function checkTrue(name, cond, detail) {
 
 setTimeout(() => {
   console.log('\n──── RENDERED CONTENT ────');
-  check('project cards',        document.querySelectorAll('#project-grid article').length, 7);
+  check('project slides',       document.querySelectorAll('#project-stage .proj-item').length, 6);
+  check('no PDF links in projects', document.querySelectorAll('#projects a[href$=".pdf"]').length, 0);
+  const projModal = document.querySelector('#proj-modal');
+  checkTrue('project modal exists & hidden', !!projModal && projModal.classList.contains('hidden'));
+  ['proj-15','proj-09','proj-07','proj-05','proj-04','proj-03'].forEach(n =>
+    checkTrue('cover ' + n + '.jpg on disk', fs.existsSync(path.join(ROOT, 'assets/img/projects', n + '.jpg'))));
+  // open the detail modal by clicking the centered slide
+  document.querySelectorAll('#project-stage .proj-item')[0]
+    .dispatchEvent(new window.Event('click', { bubbles: true }));
+  checkTrue('modal opens with project title',
+    !projModal.classList.contains('hidden') && /B\+G\+13/.test(document.querySelector('#pm-title').textContent));
+  checkTrue('modal role/scope/challenge/solution/result filled',
+    ['pm-role','pm-scope','pm-challenge','pm-solution','pm-result']
+      .every(id => document.getElementById(id).textContent.length > 20));
+  checkTrue('modal meta chips + tags', document.querySelectorAll('#pm-meta .pm-chip').length === 3 &&
+    document.querySelectorAll('#pm-tags .tag').length >= 4);
+  document.querySelector('#proj-modal .proj-modal__close')
+    .dispatchEvent(new window.Event('click', { bubbles: true }));
+  setTimeout(() => {
+    checkTrue('modal closes again', projModal.classList.contains('hidden'));
+  }, 400);
   check('skill groups',         document.querySelectorAll('#skills-grid > div').length, 3);
   check('skill items',          document.querySelectorAll('#skills-grid .space-y-3 > div').length, 12);
-  check('certification cards',  document.querySelectorAll('#cert-grid article').length, 16);
+  check('certification cards',  document.querySelectorAll('#cert-grid .cert-card:not([aria-hidden])').length, 21);
+  check('certification loop clones (aria-hidden)', document.querySelectorAll('#cert-grid .cert-card[aria-hidden="true"]').length, 21);
+  check('certification marquee rows', document.querySelectorAll('#cert-grid .cert-row').length, 2);
+  {
+    const certModal = document.querySelector('#cert-modal');
+    document.querySelector('#cert-grid .cert-card[data-cert="4"]')
+      .dispatchEvent(new window.Event('click', { bubbles: true }));
+    checkTrue('cert modal opens on card click', !certModal.classList.contains('hidden') &&
+      /AutoCAD 2D/.test(document.getElementById('cm-title').textContent));
+    checkTrue('cert modal shows its certificate image',
+      document.getElementById('cm-img').getAttribute('src') === 'assets/img/certs/c-autocad-2d3d-zero-hero.jpg');
+    checkTrue('cert modal has a description', document.getElementById('cm-desc').textContent.length > 40);
+    certModal.querySelector('.proj-modal__close')
+      .dispatchEvent(new window.Event('click', { bubbles: true }));
+    checkTrue('cert modal closes', !certModal.classList.contains('is-open'));
+  }
   check('carousel slides',      document.querySelectorAll('#carousel-stage img.carousel-item').length, 16);
   check('carousel thumbnails',  document.querySelectorAll('#carousel-thumbs button').length, 16);
   check('marquee row 1 chips',  document.querySelectorAll('#marquee-row-1 > span').length, 20);
@@ -109,13 +144,48 @@ setTimeout(() => {
 
   console.log('\n──── CV / CONTACT ────');
   const cvLinks = [...document.querySelectorAll('a[download]')];
-  check('CV download buttons', cvLinks.length, 2);
+  check('CV download buttons (nav + hero + mobile menu)', cvLinks.length, 3);
+  checkTrue('nav CV button sits right before Contact Me',
+    (() => { const n = document.querySelector('nav a[download]');
+             return n && n.nextElementSibling && n.nextElementSibling.textContent.trim() === 'Contact Me'; })());
   checkTrue('all CV links point at the supplied filename',
     cvLinks.every(a => a.getAttribute('href') === 'assets/cv/Imran-Hasan-CV.pdf'));
   checkTrue('profile photo points at imran.jpg',
     document.querySelector('img[alt^="Imran Hasan"]').getAttribute('src') === 'assets/img/profile/imran.jpg');
   checkTrue('contact form targets Formspree',
     /formspree\.io\/f\//.test(document.getElementById('contact-form').getAttribute('action')));
+
+  console.log('\n──── NEW FEATURES ────');
+  check('testimonial cards', document.querySelectorAll('#testimonials figure').length, 2);
+  check('tools repo cards',
+    document.querySelectorAll('#tools a[href^="https://github.com/Engr-ImranHasan/"]').length, 3);
+  checkTrue('tools profile view-all link',
+    !!document.querySelector('#tools a[href="https://github.com/Engr-ImranHasan"]'));
+  const copyBtns = [...document.querySelectorAll('[data-copy]')];
+  check('copy buttons', copyBtns.length, 3);
+  checkTrue('copy values unique', new Set(copyBtns.map(b => b.getAttribute('data-copy'))).size === 3);
+  const wa = [...document.querySelectorAll('a[href^="https://wa.me/"]')];
+  checkTrue('all ' + wa.length + ' WhatsApp links prefilled',
+    wa.every(a => a.getAttribute('href').includes('?text=')));
+  checkTrue('radar canvas present', !!document.getElementById('skill-radar'));
+  check('timeline items', document.querySelectorAll('.timeline .tl-item').length, 2);
+  checkTrue('nav + mobile menu have Tools link',
+    !!document.querySelector('#nav-links a[href="#tools"]') &&
+    !!document.querySelector('#mobile-menu a[href="#tools"]'));
+  checkTrue('404.html exists', fs.existsSync(path.join(ROOT, '404.html')));
+  const gscMeta = document.querySelector('meta[name="google-site-verification"]');
+  checkTrue('GSC meta is active with real code',
+    !!gscMeta && gscMeta.getAttribute('content') === 'poTiwcz5QKWwkQglddZh9AzY2KWJaZIfqKeIVIU8-6I');
+  const gcScript = document.querySelector('script[data-goatcounter]');
+  checkTrue('GoatCounter script active with real code',
+    !!gcScript && gcScript.getAttribute('data-goatcounter') === 'https://imran2050.goatcounter.com/count');
+  const cfSuccess = document.querySelector('#cf-success');
+  checkTrue('form success card exists', !!cfSuccess);
+  checkTrue('success card says Thank you',
+    !!cfSuccess && /Thank you for your message/i.test(cfSuccess.textContent));
+  checkTrue('success card starts hidden',
+    !!cfSuccess && cfSuccess.classList.contains('hidden'));
+  checkTrue('send-another button present', !!document.querySelector('#cf-again'));
 
 }, 800);
 

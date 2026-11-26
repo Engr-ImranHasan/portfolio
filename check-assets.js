@@ -13,7 +13,7 @@ const local=[...refs].filter(u=>!/^https?:|^data:|^mailto:|^tel:|^#/.test(u));
   .concat(['assets/img/icons.svg']).forEach(p=>local.push(p));
 
 const core=[],user=[];
-const USER_PAT=/(assets\/img\/(profile|projects|memories|og)\/|assets\/cv\/)/;
+const USER_PAT=/(assets\/img\/(profile|projects|memories|og)\/|assets\/logos\/|assets\/cv\/)/;
 for(const p of [...new Set(local)]) (USER_PAT.test(p)?user:core).push(p);
 
 let fail=0;

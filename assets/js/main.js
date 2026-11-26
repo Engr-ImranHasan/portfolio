@@ -167,6 +167,13 @@
   /* ---- Gallery images ---- */
   var MEMORY_COUNT = 16;
   var MEMORY_DIR   = 'assets/img/memories/';
+  var MEMORY_LIST  = null;   // replaced by assets/data/content.js when the edit panel saved memories
+  function getMemories() {
+    if (MEMORY_LIST) return MEMORY_LIST;
+    var out = [];
+    for (var i = 1; i <= MEMORY_COUNT; i++) out.push({ src: MEMORY_DIR + 'memory-' + i + '.jpg', caption: '' });
+    return out;
+  }
 
   /* ---- Rotating headline roles ---- */
   var ROLES = [
@@ -188,7 +195,7 @@
   };
 
   var ProjCarousel = (function () {
-    var AUTOPLAY = 3800;
+    var AUTOPLAY = 2000;   /* projects auto-advance (ms) */
     var items = [], idx = 0, timer = null, modalOpen = false;
     var stage, curEl, totEl, statusEl;
     var onScreen = false, paused = false;
@@ -501,7 +508,7 @@
     certLastFocus = fromEl || document.activeElement;
     var img = $('#cm-img'), none = $('#cm-noimg');
     if (c.img) {
-      img.src = CERT_IMG + c.img + '.jpg'; img.alt = c.title + ' — certificate';
+      img.src = /\//.test(c.img) ? c.img : CERT_IMG + c.img + '.jpg'; img.alt = c.title + ' — certificate';
       img.hidden = false; none.hidden = true;
     } else {
       img.removeAttribute('src'); img.alt = ''; img.hidden = true; none.hidden = false;
@@ -551,7 +558,7 @@
      RENDER: memories carousel
      ==================================================================== */
   var Carousel = (function () {
-    var AUTOPLAY = 3000;
+    var AUTOPLAY = 1800;   /* memories auto-advance (ms) */
     var stage, thumbs, curEl, totEl, statusEl;
     var items = [], thumbEls = [], idx = 0, timer = null;
     var onScreen = false, paused = false;   // autoplay gating state
@@ -568,11 +575,12 @@
       statusEl = $('#carousel-status');
       if (!stage) return false;
 
-      for (var i = 1; i <= MEMORY_COUNT; i++) {
-        var src = MEMORY_DIR + 'memory-' + i + '.jpg';
+      var MEM = getMemories();
+      for (var i = 1; i <= MEM.length; i++) {
+        var src = MEM[i - 1].src;
 
         var img = document.createElement('img');
-        img.alt = 'Memory ' + i;
+        img.alt = MEM[i - 1].caption || ('Memory ' + i);
         img.loading = i < 4 ? 'eager' : 'lazy';
         img.decoding = 'async';
         img.className = 'carousel-item';
@@ -610,7 +618,7 @@
           thumbEls.push(b);
         }
       }
-      if (totEl) totEl.textContent = String(MEMORY_COUNT).padStart(2, '0');
+      if (totEl) totEl.textContent = String(MEM.length).padStart(2, '0');
       return true;
     }
 
@@ -1093,7 +1101,213 @@
   /* ====================================================================
      BOOT
      ==================================================================== */
+  /* ====================================================================
+     SITE CONTENT — overrides written by the edit panel (assets/data/content.js)
+     ==================================================================== */
+  /* ---- Content addressing (shared with editor.js) ----
+     A text/link is addressed by a structural path (tag:index chain from <body>),
+     or by its data-edit name. Each override stores the ORIGINAL text/value it was
+     made for ("o"); if index.html changes so the original no longer matches, the
+     override is skipped instead of landing on the wrong element. */
+  var SKIP_SEL = '#ed-bar,.ed-overlay,.ed-itemctl,script,style,noscript,[data-block],#project-stage,#carousel-stage,#carousel-thumbs,' +
+                 '#cert-grid,#cert-row-1,#cert-row-2,#skills-grid,.marquee,#marquee-row-1,#marquee-row-2,' +
+                 '#proj-modal,#cert-modal,#typewriter,#cf-success,[data-clone]';
+  var INLINE_TAGS = { STRONG:1, EM:1, B:1, I:1, SPAN:1, A:1, BR:1, SMALL:1, CODE:1, U:1, MARK:1, SUP:1, SUB:1, SVG:1 };
+
+  function normText(el) { return String(el.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function origOf(el) { return el.hasAttribute('data-count') ? el.getAttribute('data-count') : normText(el); }
+  function pathOf(el) {
+    var parts = [];
+    while (el && el !== document.body && el.parentElement) {
+      var i = 1;
+      for (var s = el.previousElementSibling; s; s = s.previousElementSibling) if (s.tagName === el.tagName) i++;
+      parts.unshift(el.tagName.toLowerCase() + ':' + i);
+      el = el.parentElement;
+    }
+    return parts.join('>');
+  }
+  function nodeKey(el) { return el.getAttribute('data-edit') || pathOf(el); }
+  function nodeByPath(path) {
+    var node = document.body, segs = String(path).split('>');
+    for (var i = 0; i < segs.length; i++) {
+      var m = segs[i].match(/^([a-z0-9]+):(\d+)$/);
+      if (!m) return null;
+      var want = parseInt(m[2], 10), cnt = 0, found = null;
+      for (var c = node.firstElementChild; c; c = c.nextElementSibling) {
+        if (c.tagName.toLowerCase() === m[1] && ++cnt === want) { found = c; break; }
+      }
+      if (!found) return null;
+      node = found;
+    }
+    return node === document.body ? null : node;
+  }
+  function isLeafNode(el) {
+    if (!normText(el)) return false;
+    if (el.matches(SKIP_SEL)) return false;
+    for (var c = el.firstElementChild; c; c = c.nextElementSibling) {
+      if (!INLINE_TAGS[c.tagName.toUpperCase()]) return false;
+      if (c.matches(SKIP_SEL) || c.querySelector(SKIP_SEL)) return false;
+    }
+    return true;
+  }
+  // Outermost text containers under root (skips JS-rendered areas and data-block containers).
+  function leafNodes(root) {
+    var out = [];
+    (function walk(el) {
+      for (var c = el.firstElementChild; c; c = c.nextElementSibling) {
+        if (c.matches(SKIP_SEL)) continue;
+        if (isLeafNode(c)) out.push(c); else walk(c);
+      }
+    })(root || document.body);
+    return out;
+  }
+  // Links, image sources and copy values outside blocks and JS-rendered areas.
+  function attrNodes() {
+    var out = [];
+    (function walk(el) {
+      for (var c = el.firstElementChild; c; c = c.nextElementSibling) {
+        if (c.matches(SKIP_SEL) || c.tagName.toLowerCase() === 'use') continue;
+        ['href', 'src', 'data-copy'].forEach(function (a) {
+          if (!c.hasAttribute(a)) return;
+          var v = c.getAttribute(a);
+          if (a === 'href' && (v.charAt(0) === '#' || /^javascript:/i.test(v))) return;
+          out.push({ key: pathOf(c) + '@' + a, node: c, attr: a });
+        });
+        walk(c);
+      }
+    })(document.body);
+    return out;
+  }
+
+  function applyContent(c) {
+    if (!c) return;
+    // 1) repeatable blocks (experience, testimonials, research, education): full innerHTML snapshot
+    if (c.blocks) Object.keys(c.blocks).forEach(function (k) {
+      var n = document.querySelector('[data-block="' + k + '"]');
+      if (n && typeof c.blocks[k] === 'string') n.innerHTML = c.blocks[k];
+    });
+    // 2) text overrides
+    if (c.texts) Object.keys(c.texts).forEach(function (k) {
+      var ent = c.texts[k], node = /:/.test(k) ? nodeByPath(k) : document.querySelector('[data-edit="' + k + '"]');
+      if (!node || ent == null) return;
+      if (typeof ent === 'string') { node.innerHTML = ent; return; }          // legacy format
+      if (origOf(node) !== String(ent.o)) return;                            // index.html changed: skip
+      if (node.hasAttribute('data-count')) node.setAttribute('data-count', String(parseInt(ent.h, 10) || 0));
+      else node.innerHTML = ent.h;
+    });
+    // 3) link / image / copy-value overrides
+    if (c.attrs) Object.keys(c.attrs).forEach(function (key) {
+      var at = key.lastIndexOf('@'), ent = c.attrs[key], node = nodeByPath(key.slice(0, at));
+      if (!node || !ent) return;
+      if (node.getAttribute(key.slice(at + 1)) !== String(ent.o)) return;
+      node.setAttribute(key.slice(at + 1), String(ent.v));
+    });
+    if (Array.isArray(c.projects)) PROJECTS = c.projects;
+    if (Array.isArray(c.skills))   SKILL_GROUPS = c.skills;
+    if (Array.isArray(c.certs))    CERTS = c.certs;
+    if (Array.isArray(c.memories)) MEMORY_LIST = c.memories;
+    if (Array.isArray(c.tools1))   TOOLS_ROW_1 = c.tools1;
+    if (Array.isArray(c.tools2))   TOOLS_ROW_2 = c.tools2;
+    if (Array.isArray(c.roles) && c.roles.length) ROLES = c.roles;
+    if (Array.isArray(c.radar))    RADAR = c.radar;
+    $$('[data-live="certs"]').forEach(function (node) { node.setAttribute('data-count', String(CERTS.length)); });
+  }
+
+  window.SiteDOM = {
+    leafNodes: leafNodes, attrNodes: attrNodes, nodeKey: nodeKey, origOf: origOf,
+    normText: normText, nodeByPath: nodeByPath, SKIP_SEL: SKIP_SEL
+  };
+
+  window.SiteData = {
+    get projects() { return PROJECTS; },
+    get skills()   { return SKILL_GROUPS; },
+    get certs()    { return CERTS; },
+    get memories() { return getMemories(); },
+    get tools1()   { return TOOLS_ROW_1; },
+    get tools2()   { return TOOLS_ROW_2; },
+    get roles()    { return ROLES; },
+    get radar()    { return RADAR; },
+    groups: { structural: G_STRUCT, software: G_SOFTWARE, programming: G_PROGRAMMING },
+    accents: Object.keys(ACCENT)
+  };
+
+  /* ---- Testimonials: horizontal auto-move, seamless loop ----
+     Real cards stay in [data-block="testimonials"] so the editor saves them as before.
+     JS moves that block into a track and adds aria-hidden copies (data-clone), which
+     the editor ignores. Copies are rebuilt on resize, and on the next page load after an edit. */
+  var TestiMarquee = (function () {
+    var SPEED = 28;                 /* px per second */
+    var s = null, raf = 0, last = 0;
+
+    function reduced() { return !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    function wrap(x, w) { x = x % w; if (x > 0) x -= w; return x; }
+    function apply() { s.track.style.transform = 'translate3d(' + s.x.toFixed(2) + 'px,0,0)'; }
+
+    function build() {
+      s.clones.forEach(function (c) { c.remove(); });
+      s.clones = [];
+      s.w = s.set.offsetWidth || 1;
+      /* enough copies that the visible window never runs past the last copy */
+      var k = Math.max(1, Math.ceil((s.vp.clientWidth || 1) / s.w));
+      for (var i = 0; i < k; i++) {
+        var c = s.set.cloneNode(true);
+        c.removeAttribute('data-block');
+        c.removeAttribute('id');
+        c.setAttribute('data-clone', '');
+        c.setAttribute('aria-hidden', 'true');
+        c.querySelectorAll('[data-reveal]').forEach(function (n) { n.removeAttribute('data-reveal'); });
+        c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
+        c.querySelectorAll('a,button,input,textarea,select').forEach(function (n) { n.setAttribute('tabindex', '-1'); });
+        s.track.appendChild(c);
+        s.clones.push(c);
+      }
+      s.x = wrap(s.x, s.w);
+      apply();
+    }
+
+    function tick(now) {
+      var dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+      last = now;
+      /* pause: tab hidden, mouse over, finger on the row, or the editor is open */
+      var paused = document.hidden || s.hover || s.hold || !!document.getElementById('ed-bar');
+      if (!paused && s.w > 1) { s.x = wrap(s.x - SPEED * dt, s.w); apply(); }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function init() {
+      var set = $('[data-block="testimonials"]');
+      if (!set || !set.parentNode || reduced()) return;   /* reduced motion: stays a static grid */
+      var vp = document.createElement('div');
+      vp.className = 'testi-viewport';
+      var track = document.createElement('div');
+      track.className = 'testi-track';
+      set.parentNode.insertBefore(vp, set);
+      track.appendChild(set);
+      vp.appendChild(track);
+      set.classList.add('testi-set');
+      s = { vp: vp, track: track, set: set, clones: [], x: 0, w: 1, hover: false, hold: false, holdT: null };
+
+      vp.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') s.hover = true; });
+      vp.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') s.hover = false; });
+      vp.addEventListener('touchstart', function () { clearTimeout(s.holdT); s.hold = true; }, { passive: true });
+      ['touchend', 'touchcancel'].forEach(function (ev) {
+        vp.addEventListener(ev, function () {
+          clearTimeout(s.holdT);
+          s.holdT = setTimeout(function () { s.hold = false; }, 1200);
+        }, { passive: true });
+      });
+
+      build();
+      var rt = 0;
+      window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
+      raf = requestAnimationFrame(tick);
+    }
+    return { init: init };
+  })();
+
   function boot() {
+    applyContent(window.SITE_CONTENT);
+    TestiMarquee.init();
     ProjCarousel.init();
     initProjectModal();
     initCertModal();

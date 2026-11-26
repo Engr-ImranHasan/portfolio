@@ -551,3 +551,11 @@ body.modal-lock { overflow: hidden; }
 .proj-modal__media { background: #060d1d; }
 .proj-modal__media img { object-fit: contain; padding: 0.6rem; }
 @media (min-width: 768px) { .proj-modal__media img { padding: 1.1rem; } }
+
+/* Edit mode: auto-moving rows (testimonials, tools) become a normal grid; the copies are hidden.
+   Leaving edit mode reloads the page, which rebuilds the moving rows with the saved content. */
+body.ed-mode .testi-viewport { overflow: visible; -webkit-mask-image: none; mask-image: none; padding: 0; }
+body.ed-mode .testi-track { display: block; transform: none !important; width: auto; }
+body.ed-mode .testi-track > .testi-set { display: grid !important; width: auto; padding-right: 0; }
+body.ed-mode .testi-track > .testi-set > :not(.ed-itemctl) { width: auto; }
+body.ed-mode .testi-track > [data-clone] { display: none; }

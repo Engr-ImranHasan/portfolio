@@ -144,6 +144,8 @@
   /* ---------- enter / exit ---------- */
   function enterEdit() {
     var sc = window.SITE_CONTENT || {}, SD = window.SiteData, SDOM = window.SiteDOM;
+    /* edit mode: auto-moving rows become a plain grid so the add / move / delete controls are reachable */
+    document.body.classList.add('ed-mode');
     W = {
       texts: clone(sc.texts || {}), attrs: clone(sc.attrs || {}), blocks: clone(sc.blocks || {}),
       projects: clone(SD.projects), skills: clone(SD.skills), certs: clone(SD.certs), memories: clone(SD.memories),

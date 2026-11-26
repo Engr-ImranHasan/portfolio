@@ -2,7 +2,7 @@ window.SITE_CONTENT = {
   "texts": {
     "nav:1>div:1>div:1": {
       "o": "Projects Experience Skills Tools Certifications Research Memories",
-      "h": "\n      <a href=\"#projects\" class=\"nav-link\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link is-active\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
+      "h": "\n      <a href=\"#projects\" class=\"nav-link\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link is-active\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
     }
   },
   "attrs": {},
@@ -171,7 +171,7 @@ window.SITE_CONTENT = {
           "kind": "blue"
         },
         {
-          "name": "AutoCAD 2D / 3D & Revit",
+          "name": "AutoCAD 2D / SketchUP & Revit",
           "note": "Structural Drafting & BIM",
           "badge": "Expert",
           "kind": "blue"
@@ -229,7 +229,7 @@ window.SITE_CONTENT = {
       "icon": "i-laptop-code",
       "items": [
         {
-          "name": "MS Office (Word, Excel, PowerPoint)",
+          "name": "MS Office (Project, Word, Excel, PowerPoint)",
           "note": "Professional Engineering Suite",
           "badge": "Proficient",
           "kind": "emerald"

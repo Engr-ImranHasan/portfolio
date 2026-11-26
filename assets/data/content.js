@@ -2,7 +2,7 @@ window.SITE_CONTENT = {
   "texts": {
     "nav:1>div:1>div:1": {
       "o": "Projects Experience Skills Tools Certifications Research Memories",
-      "h": "\n      <a href=\"#projects\" class=\"nav-link\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link is-active\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
+      "h": "\n      <a href=\"#projects\" class=\"nav-link is-active\" data-navlink=\"\">Projects</a>\n      <a href=\"#experience\" class=\"nav-link\" data-navlink=\"\">Experience</a>\n      <a href=\"#skills\" class=\"nav-link\" data-navlink=\"\">Skills</a>\n                <a href=\"#tools\" class=\"nav-link\" data-navlink=\"\">Tools</a>\n      <a href=\"#certs\" class=\"nav-link\" data-navlink=\"\">Certifications</a>\n      <a href=\"#research\" class=\"nav-link\" data-navlink=\"\">Research</a>\n      <a href=\"#gallery\" class=\"nav-link\" data-navlink=\"\">Memories</a>\n    "
     }
   },
   "attrs": {},
@@ -115,7 +115,7 @@ window.SITE_CONTENT = {
       ]
     },
     {
-      "img": "assets/img/uploads/mwwzjsht8762.jpg",
+      "img": "assets/img/uploads/mwx0lowmsuo8.jpg",
       "cat": "Construction Management / Digital Tool Development (Site Reporting Automation)",
       "accent": "sky",
       "title": "Automated Daily Site Progress Reporting System – CCECC WD-5B",
@@ -154,6 +154,27 @@ window.SITE_CONTENT = {
         "ETABS",
         "AutoCAD",
         "BNBC 2020"
+      ]
+    },
+    {
+      "img": "assets/img/uploads/mwx0x7t0iifl.jpg",
+      "cat": "GIS & Spatial Analytics / Infrastructure Progress Monitoring",
+      "accent": "sky",
+      "title": "Automated GIS Construction Progress Mapping: WA Shaft, Micro-Tunneling & Manhole",
+      "storey": "Shafts, manholes, and micro-tunneled pipeline",
+      "location": "WD-5B Site, Dhaka, Bangladesh",
+      "client": "DWASA (CCECC-SafBon-SMEDI JV)",
+      "role": "GIS Analyst and Automation Developer. I built the full project GIS database in ArcGIS Pro and wrote the scripts that update the map, status counts, and legend automatically.",
+      "scope": "Built the complete project GIS covering the 6.061 km pipeline corridor, 37 shafts (WA 01 to WA 36 plus SPS), and manholes. Produced a construction progress map \"as of\" a given date showing shaft status, manhole status, and micro-tunneling status by pipe diameter (DN 900, DN 1000, DN 1600). The map shows total and completed lengths per diameter and overall.",
+      "challenge": "Progress maps were slow to prepare by hand. Every update meant recounting shafts and manholes by status, re-measuring completed pipe lengths, and editing the legend manually. This took time, risked counting errors, and produced inconsistent maps for management and client reporting.",
+      "solution": "Structured the whole project in ArcGIS Pro and used Python scripting to automate the workflow. The code counts the features in each status (Complete, On-Going, Remaining) and calculates completed and total lengths per pipe diameter. It then updates the legend automatically with the live counts, so one data update refreshes the whole map layout in a single run.",
+      "result": "Progress maps are now generated quickly, with accurate counts and lengths and no manual legend editing. The latest map (as of 15 November 2026) reports 1.32 km completed out of 6.061 km (about 22%), with 20 shafts complete, 10 on-going, and 7 remaining. The map is ready for client reports and management review.",
+      "tags": [
+        "ArcGIS Pro",
+        "Python",
+        "ArcPy",
+        "GIS Automation",
+        "Spatial Analysis"
       ]
     }
   ],

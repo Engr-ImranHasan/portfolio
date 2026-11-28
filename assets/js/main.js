@@ -1316,7 +1316,7 @@
 
   function boot() {
     applyContent(window.SITE_CONTENT);
-    AutoRows.init(['testimonials', 'tools']);
+    AutoRows.init(['testimonials']);   /* tools: static grid, no horizontal movement */
     ProjCarousel.init();
     initProjectModal();
     initCertModal();
